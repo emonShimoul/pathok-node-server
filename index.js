@@ -22,9 +22,9 @@ async function run() {
 
     app.post('/books', async (req, res) => {
       const books = req.body;
-      // const result = await booksCollection.insertOne(appointment);
+      const result = await booksCollection.insertOne(books);
       console.log(books);
-      // res.json(result);
+      res.json(result);
     });
   }
   finally {
