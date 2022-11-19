@@ -26,6 +26,12 @@ async function run() {
       // console.log(books);
       res.json(result);
     });
+
+    app.get('/books', async (req, res) => {
+      const cursor = booksCollection.find();
+      const books = await cursor.toArray();
+      res.json(books);
+    })
   }
   finally {
     // await client.close();
