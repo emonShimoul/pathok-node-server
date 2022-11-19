@@ -14,20 +14,29 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
-    try {
-        await client.connect();
-        console.log('database connected successfully');
-    }
-    finally {
-      // await client.close();
-    }
+  try {
+    await client.connect();
+    // console.log('database connected successfully');
+    const database = client.db('pathok');
+    const booksCollection = database.collection('books');
+
+    app.post('/books', async (req, res) => {
+      const books = req.body;
+      // const result = await booksCollection.insertOne(appointment);
+      console.log(books);
+      // res.json(result);
+    });
+  }
+  finally {
+    // await client.close();
+  }
 }
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-    res.send('Hello Reader!')
-  });
-  
-  app.listen(port, () => {
-    console.log(`listening at ${port}`)
-  });
+  res.send('Hello Reader!')
+});
+
+app.listen(port, () => {
+  console.log(`listening at ${port}`)
+});
