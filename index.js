@@ -29,7 +29,7 @@ async function run() {
     });
 
     app.get('/books', async (req, res) => {
-      const cursor = booksCollection.find();
+      const cursor = booksCollection.find({});
       const books = await cursor.toArray();
       res.json(books);
     })
@@ -40,6 +40,16 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const book = await booksCollection.findOne(query);
       res.json(book);
+    })
+
+    // DELETE API
+    app.delete('/books/:id', async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollection.deleteOne(query);
+      // console.log("deleted successfully", result);
+      res.json(result);
     })
   }
   finally {
