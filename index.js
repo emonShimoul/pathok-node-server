@@ -48,12 +48,22 @@ async function run() {
       res.json(result);
     })
 
-    // POST API for users
+    // save user to the database by registration
     app.post('/users', async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
       res.json(result);
     });
+
+    // save user to the database by using google account registration
+    app.put('/users', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const options = { upsert: true }; // this option instructs the method to create a document if no documents match the filter
+      const updateDoc = { $set: user };
+      const result = await usersCollection.updateOne(filter, updateDoc, options);
+      res.json(result);
+    })
 
   }
   finally {
