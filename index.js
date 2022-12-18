@@ -20,6 +20,7 @@ async function run() {
     // console.log('database connected successfully');
     const database = client.db('pathok');
     const booksCollection = database.collection('books');
+    const usersCollection = database.collection('users');
 
     app.post('/books', async (req, res) => {
       const books = req.body;
@@ -42,7 +43,7 @@ async function run() {
       res.json(book);
     })
 
-    // DELETE API
+    // DELETE API for Books
     app.delete('/books/:id', async (req, res) => {
       const id = req.params.id;
       // console.log(id);
@@ -51,6 +52,14 @@ async function run() {
       // console.log("deleted successfully", result);
       res.json(result);
     })
+
+    // POST API for users
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.json(result);
+    });
+
   }
   finally {
     // await client.close();
