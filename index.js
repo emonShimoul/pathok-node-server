@@ -47,9 +47,6 @@ async function run() {
       }
       const result = await booksCollection.insertOne(book);
       res.json(result)
-      // const books = req.body;
-      // const result = await booksCollection.insertOne(books);
-      // res.json(result);
     });
 
     app.get('/books', async (req, res) => {
