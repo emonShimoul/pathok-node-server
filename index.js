@@ -17,7 +17,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
   try {
     await client.connect();
-    // console.log('database connected successfully');
     const database = client.db('pathok');
     const booksCollection = database.collection('books');
     const usersCollection = database.collection('users');
@@ -25,7 +24,6 @@ async function run() {
     app.post('/books', async (req, res) => {
       const books = req.body;
       const result = await booksCollection.insertOne(books);
-      // console.log(books);
       res.json(result);
     });
 
@@ -37,7 +35,6 @@ async function run() {
 
     app.get('/books/:id', async (req, res) => {
       const id = req.params.id;
-      // console.log('getting...', id);
       const query = { _id: ObjectId(id) };
       const book = await booksCollection.findOne(query);
       res.json(book);
@@ -46,10 +43,8 @@ async function run() {
     // DELETE API for Books
     app.delete('/books/:id', async (req, res) => {
       const id = req.params.id;
-      // console.log(id);
       const query = { _id: ObjectId(id) };
       const result = await booksCollection.deleteOne(query);
-      // console.log("deleted successfully", result);
       res.json(result);
     })
 
