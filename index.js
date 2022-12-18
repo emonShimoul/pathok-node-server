@@ -4,11 +4,13 @@ const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
+const fileUpload = require('express-fileupload');
 
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pabg0.mongodb.net/?retryWrites=true&w=majority`;
@@ -22,9 +24,32 @@ async function run() {
     const usersCollection = database.collection('users');
 
     app.post('/books', async (req, res) => {
-      const books = req.body;
-      const result = await booksCollection.insertOne(books);
-      res.json(result);
+      // console.log('body', req.body);
+      const bookname = req.body.bookname;
+      const writername = req.body.writername;
+      const category = req.body.category;
+      const description = req.body.description;
+      const price = req.body.price;
+      const rating = req.body.rating;
+      // console.log('files', req.files);
+      const pic = req.files.image;
+      const picData = pic.data;
+      const encodedPic = picData.toString('base64');
+      const imgBuffer = Buffer.from(encodedPic, 'base64');
+      const book = {
+        bookname,
+        writername,
+        category,
+        description,
+        price,
+        rating,
+        image: imgBuffer
+      }
+      const result = await booksCollection.insertOne(book);
+      res.json(result)
+      // const books = req.body;
+      // const result = await booksCollection.insertOne(books);
+      // res.json(result);
     });
 
     app.get('/books', async (req, res) => {
